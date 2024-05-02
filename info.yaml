@@ -3,7 +3,14 @@ project:
   source_files:
     - toplevel_chip.v
     - chip.sv
-    - decoder.v
+    - motor_driver.sv
+    - p.sv
+    - params.sv
+    - pwm.sv
+    - spi_mcp3202_interface.sv
+    - spi_mosi_interface.sv
+    - stability_detector.sv
+    - top.sv
   top_module:  "toplevel_chip"
 
 # As everyone will have access to all designs, try to make it easy for someone new to your design to know what

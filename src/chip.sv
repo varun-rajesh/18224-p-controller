@@ -6,43 +6,19 @@ module my_chip (
     input logic clock,
     input logic reset // Important: Reset is ACTIVE-HIGH
 );
-    
-    // Basic counter design as an example
-    // TODO: remove the counter design and use this module to insert your own design
-    // DO NOT change the I/O header of this design
 
-    wire [6:0] led_out;
-    assign io_out[6:0] = led_out;
+    top dut (
+        .clk            (clock),
+        .reset_n        (~reset),   
+        .input_spi_clk  (io_in[11]),
+        .input_spi_mosi (io_in[10]),
+        .input_spi_cs_n (io_in[9]),
+        .adc_spi_clk    (io_out[11]),
+        .adc_spi_miso   (io_in[8]),
+        .adc_spi_mosi   (io_out[10]),
+        .adc_spi_cs_n   (io_out[9]),
+        .pwm_a          (io_out[8]),
+        .pwm_b          (io_out[7])
+    );
 
-    // external clock is 1000Hz, so need 10 bit counter
-    reg [9:0] second_counter;
-    reg [3:0] digit;
-
-    always @(posedge clock) begin
-        // if reset, set counter to 0
-        if (reset) begin
-            second_counter <= 0;
-            digit <= 0;
-        end else begin
-            // if up to 16e6
-            if (second_counter == 1000) begin
-                // reset
-                second_counter <= 0;
-
-                // increment digit
-                digit <= digit + 1'b1;
-
-                // only count from 0 to 9
-                if (digit == 9)
-                    digit <= 0;
-
-            end else
-                // increment counter
-                second_counter <= second_counter + 1'b1;
-        end
-    end
-
-    // instantiate segment display
-    seg7 seg7(.counter(digit), .segments(led_out));
-
-endmodule
+endmodule : my_chip
